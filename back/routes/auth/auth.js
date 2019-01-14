@@ -1,12 +1,23 @@
-const { Router } = require('express');
+const express = require('express');
 
-const router = Router();
+const connection = require('../../helpers/db');
+
+const router = express.Router();
 
 /* GET index page. */
 /*auth #auth ici est une sous-route gérant la partie authentification */
 router.post('/signup', function(req, res, next) {
-    res.send('I am in POST signup');
+  const formData = req.body;
+  connection.query('INSERT INTO users SET ?', formData, function (err) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200).json({
+        flash:'User has been signed up !'
+      });
+    }
   });
+});
 
 
 module.exports = router;
